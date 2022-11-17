@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	activitygroups "todo-list/internal/modules/activity-groups"
+	todoitems "todo-list/internal/modules/todo-items"
 
 	"github.com/labstack/echo/v4"
 )
@@ -22,5 +23,5 @@ func Init(g *echo.Group) {
 
 	//routes
 	activitygroups.NewHandler().Route(g.Group("activity-groups"))
-
+	todoitems.NewHandler().Route(g.Group("todo-items"))
 }

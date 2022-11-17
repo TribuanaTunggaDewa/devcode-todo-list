@@ -20,7 +20,7 @@ func NewRepository(DBConnection *gorm.DB, Model any) *Repository {
 	}
 }
 
-func (r *Repository) Find(payload *abstractions.GetQueries, out any) error {
+func (r *Repository) Find(payload *abstractions.GetQueries, out any, param string) error {
 	t := reflect.TypeOf(out)
 	if t.Kind() != reflect.Ptr {
 		return errors.New("out must be a pointer")

@@ -3,7 +3,7 @@ package repository
 import "todo-list/internal/abstractions"
 
 type RepositoryInterface interface {
-	Find(payload *abstractions.GetQueries, out any) error
+	Find(payload *abstractions.GetQueries, out any, param string) error
 	FindById(id int, payload *abstractions.GetByIdQueries, out any) error
 	Create(payload any) error
 	Update(id int, payload any) error

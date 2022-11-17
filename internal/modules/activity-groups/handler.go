@@ -35,7 +35,7 @@ func (h *handler) Get(c echo.Context) error {
 	repository := repository.NewRepository(dbconnection, data)
 	h.service = service.NewService(repository)
 
-	err = h.service.Repository.Find(&abstractions.GetQueries{}, data)
+	err = h.service.Repository.Find(&abstractions.GetQueries{}, data, "")
 
 	if err != nil {
 		return response.ErrorBuilder(response.Constant.Error.NotFound, errors.New("activity-group not found")).Send(c)
@@ -48,7 +48,7 @@ func (h *handler) GetById(c echo.Context) error {
 	dbconnection, err := database.GetConnection()
 
 	if err != nil {
-		return err
+		return response.CustomErrorBuilder(500, &dto.ErrorNilObject{}, "error", "error").Send(c)
 	}
 
 	id, err := strconv.Atoi(c.Param("id"))
@@ -74,9 +74,8 @@ func (h *handler) Store(c echo.Context) error {
 	dbconnection, err := database.GetConnection()
 
 	if err != nil {
-		return err
+		return response.CustomErrorBuilder(500, &dto.ErrorNilObject{}, "error", "error").Send(c)
 	}
-
 	activityGroup := new(model.ActivityGroup)
 
 	repository := repository.NewRepository(dbconnection, activityGroup)
@@ -103,7 +102,7 @@ func (h *handler) Store(c echo.Context) error {
 	err = h.service.Repository.Create(activityGroup)
 
 	if err != nil {
-		return err
+		return response.ErrorBuilder(response.Constant.Error.InternalServerError, err).Send(c)
 	}
 
 	return response.CustomSuccessBuilder(200, activityGroup, "success", "success").Send(c)
@@ -114,7 +113,7 @@ func (h *handler) Update(c echo.Context) error {
 	dbconnection, err := database.GetConnection()
 
 	if err != nil {
-		return err
+		return response.CustomErrorBuilder(500, &dto.ErrorNilObject{}, "error", "error").Send(c)
 	}
 
 	activityGroup := new(model.ActivityGroup)
@@ -164,7 +163,7 @@ func (h *handler) Delete(c echo.Context) error {
 	dbconnection, err := database.GetConnection()
 
 	if err != nil {
-		return err
+		return response.CustomErrorBuilder(500, &dto.ErrorNilObject{}, "error", "error").Send(c)
 	}
 
 	activityGroup := new(model.ActivityGroup)

@@ -9,8 +9,10 @@ import (
 
 type Todoitem struct {
 	abstractions.Model
-	ActivityGroupId string `json:"activity_group_id"`
+	ActivityGroupId int    `json:"activity_group_id"`
 	Title           string `json:"title"`
+	IsActive        string `json:"is_active"`
+	Priority        string `json:"priority"`
 }
 
 func (m *Todoitem) BeforeCreate(tx *gorm.DB) {
