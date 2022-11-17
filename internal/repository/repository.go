@@ -73,7 +73,7 @@ func (r *Repository) Update(id int, payload any) error {
 	}
 
 	query := r.DBConnection.Model(r.Model)
-	err := query.Updates(payload).Error
+	err := query.Where("id = ?", id).Updates(payload).Error
 	if err != nil {
 		return err
 	}

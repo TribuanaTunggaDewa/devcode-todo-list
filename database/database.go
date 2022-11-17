@@ -39,7 +39,7 @@ func Init(ctx context.Context) {
 	dbConnectionsMysql = db.(*gorm.DB)
 }
 
-func getConnection() (any, error) {
+func GetConnection() (*gorm.DB, error) {
 	if dbConnectionsMysql == nil {
 		return nil, errors.New("connection is undefined")
 	}
