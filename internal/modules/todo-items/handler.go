@@ -32,7 +32,7 @@ func (h *handler) Get(c echo.Context) error {
 	if err != nil {
 		return response.CustomErrorBuilder(500, &dto.ErrorNilObject{}, "error", "error").Send(c)
 	}
-	data := new([]model.Todoitem)
+	data := new([]model.Todo)
 	repository := repository.NewTodoItem(dbconnection, data)
 	h.service = service.NewService(repository)
 
@@ -57,7 +57,7 @@ func (h *handler) GetById(c echo.Context) error {
 		return response.ErrorBuilder(response.Constant.Error.BadRequest, err).Send(c)
 	}
 
-	data := new([]model.Todoitem)
+	data := new([]model.Todo)
 	repository := repository.NewTodoItem(dbconnection, data)
 	h.service = service.NewService(repository)
 
@@ -78,7 +78,7 @@ func (h *handler) Store(c echo.Context) error {
 		return response.CustomErrorBuilder(500, &dto.ErrorNilObject{}, "error", "error").Send(c)
 	}
 
-	todoItem := new(model.Todoitem)
+	todoItem := new(model.Todo)
 
 	repository := repository.NewTodoItem(dbconnection, todoItem)
 	h.service = service.NewService(repository)
@@ -121,7 +121,7 @@ func (h *handler) Update(c echo.Context) error {
 		return response.CustomErrorBuilder(500, &dto.ErrorNilObject{}, "error", "error").Send(c)
 	}
 
-	todoItem := new(model.Todoitem)
+	todoItem := new(model.Todo)
 
 	repository := repository.NewTodoItem(dbconnection, todoItem)
 	h.service = service.NewService(repository)
@@ -172,7 +172,7 @@ func (h *handler) Delete(c echo.Context) error {
 		return response.CustomErrorBuilder(500, &dto.ErrorNilObject{}, "error", "error").Send(c)
 	}
 
-	todoItem := new(model.Todoitem)
+	todoItem := new(model.Todo)
 
 	repository := repository.NewTodoItem(dbconnection, todoItem)
 	h.service = service.NewService(repository)

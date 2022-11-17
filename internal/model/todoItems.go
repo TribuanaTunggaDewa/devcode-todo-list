@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type Todoitem struct {
+type Todo struct {
 	abstractions.Model
 	ActivityGroupId int    `json:"activity_group_id"`
 	Title           string `json:"title"`
@@ -15,10 +15,10 @@ type Todoitem struct {
 	Priority        string `json:"priority"`
 }
 
-func (m *Todoitem) BeforeCreate(tx *gorm.DB) {
+func (m *Todo) BeforeCreate(tx *gorm.DB) {
 	m.CreatedAt = time.Now().In(time.Local)
 }
 
-func (m *Todoitem) BeforeUpdate(tx *gorm.DB) {
+func (m *Todo) BeforeUpdate(tx *gorm.DB) {
 	m.UpdatedAt = time.Now().In(time.Local)
 }

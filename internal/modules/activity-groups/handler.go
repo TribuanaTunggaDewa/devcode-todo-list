@@ -31,7 +31,7 @@ func (h *handler) Get(c echo.Context) error {
 		return response.CustomErrorBuilder(500, &dto.ErrorNilObject{}, "error", "error").Send(c)
 	}
 
-	data := new([]model.ActivityGroup)
+	data := new([]model.Activitie)
 	repository := repository.NewRepository(dbconnection, data)
 	h.service = service.NewService(repository)
 
@@ -56,7 +56,7 @@ func (h *handler) GetById(c echo.Context) error {
 		return response.ErrorBuilder(response.Constant.Error.BadRequest, err).Send(c)
 	}
 
-	data := new([]model.ActivityGroup)
+	data := new([]model.Activitie)
 	repository := repository.NewRepository(dbconnection, data)
 	h.service = service.NewService(repository)
 
@@ -76,7 +76,7 @@ func (h *handler) Store(c echo.Context) error {
 	if err != nil {
 		return response.CustomErrorBuilder(500, &dto.ErrorNilObject{}, "error", "error").Send(c)
 	}
-	activityGroup := new(model.ActivityGroup)
+	activityGroup := new(model.Activitie)
 
 	repository := repository.NewRepository(dbconnection, activityGroup)
 	h.service = service.NewService(repository)
@@ -116,7 +116,7 @@ func (h *handler) Update(c echo.Context) error {
 		return response.CustomErrorBuilder(500, &dto.ErrorNilObject{}, "error", "error").Send(c)
 	}
 
-	activityGroup := new(model.ActivityGroup)
+	activityGroup := new(model.Activitie)
 
 	repository := repository.NewRepository(dbconnection, activityGroup)
 	h.service = service.NewService(repository)
@@ -166,7 +166,7 @@ func (h *handler) Delete(c echo.Context) error {
 		return response.CustomErrorBuilder(500, &dto.ErrorNilObject{}, "error", "error").Send(c)
 	}
 
-	activityGroup := new(model.ActivityGroup)
+	activityGroup := new(model.Activitie)
 
 	repository := repository.NewRepository(dbconnection, activityGroup)
 	h.service = service.NewService(repository)
