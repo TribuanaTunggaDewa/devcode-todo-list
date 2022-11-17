@@ -17,13 +17,6 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func init() {
-
-	env := util.NewEnv()
-	env.Load()
-
-}
-
 func main() {
 
 	exit := make(chan os.Signal, 1)
