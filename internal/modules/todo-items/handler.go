@@ -42,7 +42,7 @@ func (h *handler) Get(c echo.Context) error {
 		return response.ErrorBuilder(response.Constant.Error.NotFound, errors.New("activity-group not found")).Send(c)
 	}
 
-	return response.CustomSuccessBuilder(200, data, "success", "success").Send(c)
+	return response.CustomSuccessBuilder(200, data, "Success", "Success").Send(c)
 }
 
 func (h *handler) GetById(c echo.Context) error {
@@ -64,11 +64,11 @@ func (h *handler) GetById(c echo.Context) error {
 	err = h.service.Repository.FindById(id, &abstractions.GetByIdQueries{}, data)
 
 	if err != nil {
-		return response.CustomErrorBuilder(404, &dto.ErrorNilObject{}, fmt.Sprintf("Activity with ID %v Not Found", id), "Not Found").Send(c)
+		return response.CustomErrorBuilder(404, &dto.ErrorNilObject{}, fmt.Sprintf("Todo with ID %v Not Found", id), "Not Found").Send(c)
 
 	}
 
-	return response.CustomSuccessBuilder(200, data, "success", "success").Send(c)
+	return response.CustomSuccessBuilder(200, data, "Success", "Success").Send(c)
 }
 
 func (h *handler) Store(c echo.Context) error {
@@ -110,7 +110,7 @@ func (h *handler) Store(c echo.Context) error {
 
 	}
 
-	return response.CustomSuccessBuilder(200, todoItem, "success", "success").Send(c)
+	return response.CustomSuccessBuilder(200, todoItem, "Success", "Success").Send(c)
 
 }
 
@@ -136,14 +136,10 @@ func (h *handler) Update(c echo.Context) error {
 		return response.ErrorBuilder(response.Constant.Error.BadRequest, err).Send(c)
 	}
 
-	if payload.ActivityGroupId == 0 && payload.Title == "" {
-		return response.CustomErrorBuilder(400, dto.ErrorNilObject{}, "title cannot be null", "Bad Request").Send(c)
-	}
-
 	err = h.service.Repository.FindById(id, &abstractions.GetByIdQueries{}, todoItem)
 
 	if err != nil {
-		return response.CustomErrorBuilder(404, &dto.ErrorNilObject{}, fmt.Sprintf("Activity with ID %v Not Found", id), "Not Found").Send(c)
+		return response.CustomErrorBuilder(404, &dto.ErrorNilObject{}, fmt.Sprintf("Todo with ID %v Not Found", id), "Not Found").Send(c)
 
 	}
 
@@ -162,7 +158,7 @@ func (h *handler) Update(c echo.Context) error {
 
 	}
 
-	return response.CustomSuccessBuilder(200, todoItem, "success", "success").Send(c)
+	return response.CustomSuccessBuilder(200, todoItem, "Success", "Success").Send(c)
 }
 
 func (h *handler) Delete(c echo.Context) error {
@@ -194,6 +190,6 @@ func (h *handler) Delete(c echo.Context) error {
 		return err
 	}
 
-	return response.CustomSuccessBuilder(200, dto.ErrorNilObject{}, "success", "success").Send(c)
+	return response.CustomSuccessBuilder(200, dto.ErrorNilObject{}, "Success", "Success").Send(c)
 
 }

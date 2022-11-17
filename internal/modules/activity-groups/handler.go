@@ -41,7 +41,7 @@ func (h *handler) Get(c echo.Context) error {
 		return response.ErrorBuilder(response.Constant.Error.NotFound, errors.New("activity-group not found")).Send(c)
 	}
 
-	return response.CustomSuccessBuilder(200, data, "success", "success").Send(c)
+	return response.CustomSuccessBuilder(200, data, "Success", "Success").Send(c)
 }
 
 func (h *handler) GetById(c echo.Context) error {
@@ -67,7 +67,7 @@ func (h *handler) GetById(c echo.Context) error {
 
 	}
 
-	return response.CustomSuccessBuilder(200, data, "success", "success").Send(c)
+	return response.CustomSuccessBuilder(200, data, "Success", "Success").Send(c)
 }
 
 func (h *handler) Store(c echo.Context) error {
@@ -105,7 +105,7 @@ func (h *handler) Store(c echo.Context) error {
 		return response.ErrorBuilder(response.Constant.Error.InternalServerError, err).Send(c)
 	}
 
-	return response.CustomSuccessBuilder(200, activityGroup, "success", "success").Send(c)
+	return response.CustomSuccessBuilder(201, activityGroup, "Success", "success").Send(c)
 
 }
 
@@ -156,7 +156,7 @@ func (h *handler) Update(c echo.Context) error {
 		return response.CustomErrorBuilder(500, dto.ErrorNilObject{}, err.Error(), response.Constant.Error.InternalServerError.Error()).Send(c)
 	}
 
-	return response.CustomSuccessBuilder(200, activityGroup, "success", "success").Send(c)
+	return response.CustomSuccessBuilder(200, activityGroup, "Success", "Success").Send(c)
 }
 
 func (h *handler) Delete(c echo.Context) error {
@@ -188,5 +188,5 @@ func (h *handler) Delete(c echo.Context) error {
 		return err
 	}
 
-	return response.CustomSuccessBuilder(200, dto.ErrorNilObject{}, "success", "success").Send(c)
+	return response.CustomSuccessBuilder(200, dto.ErrorNilObject{}, "Success", "Success").Send(c)
 }

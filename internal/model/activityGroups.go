@@ -13,10 +13,12 @@ type Activitie struct {
 	Title string `json:"title"`
 }
 
-func (m *Activitie) BeforeCreate(tx *gorm.DB) {
+func (m *Activitie) BeforeCreate(tx *gorm.DB) error {
 	m.CreatedAt = time.Now().In(time.Local)
+	return nil
 }
 
-func (m *Activitie) BeforeUpdate(tx *gorm.DB) {
+func (m *Activitie) BeforeUpdate(tx *gorm.DB) error {
 	m.UpdatedAt = time.Now().In(time.Local)
+	return nil
 }

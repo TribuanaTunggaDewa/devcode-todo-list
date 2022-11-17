@@ -3,9 +3,14 @@ package util
 import (
 	"errors"
 	"fmt"
+	"regexp"
+	"strings"
 
 	"github.com/go-playground/validator/v10"
 )
+
+var matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
+var matchAllCap = regexp.MustCompile("([a-z0-9])([A-Z])")
 
 type CustomValidator struct {
 	Validator *validator.Validate
@@ -19,11 +24,11 @@ func (cv *CustomValidator) Validate(i any) error {
 		for _, fieldError := range err.(validator.ValidationErrors) {
 			var msg string
 			if fieldError.Param() != "" {
-				msg := fmt.Sprintf(`%s cannot be null`, fieldError.Field())
+				msg := fmt.Sprintf(`%s cannot be null`, ToSnakeCase(fieldError.Field()))
 				msgs = append(msgs, msg)
 				continue
 			}
-			msg = fmt.Sprintf(`%s cannot be null`, fieldError.Field())
+			msg = fmt.Sprintf(`%s cannot be null`, ToSnakeCase(fieldError.Field()))
 			msgs = append(msgs, msg)
 		}
 		erroMsg := ""
@@ -42,4 +47,10 @@ func (cv *CustomValidator) Validate(i any) error {
 	}
 
 	return nil
+}
+
+func ToSnakeCase(str string) string {
+	snake := matchFirstCap.ReplaceAllString(str, "${1}_${2}")
+	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
+	return strings.ToLower(snake)
 }
