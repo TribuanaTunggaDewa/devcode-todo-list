@@ -57,7 +57,7 @@ func (h *handler) GetById(c echo.Context) error {
 		return response.ErrorBuilder(response.Constant.Error.BadRequest, err).Send(c)
 	}
 
-	data := new([]model.Todo)
+	data := new(model.Todo)
 	repository := repository.NewTodoItem(dbconnection, data)
 	h.service = service.NewService(repository)
 
@@ -110,7 +110,7 @@ func (h *handler) Store(c echo.Context) error {
 
 	}
 
-	return response.CustomSuccessBuilder(200, todoItem, "Success", "Success").Send(c)
+	return response.CustomSuccessBuilder(201, todoItem, "Success", "Success").Send(c)
 
 }
 
@@ -151,7 +151,7 @@ func (h *handler) Update(c echo.Context) error {
 		todoItem.Title = payload.Title
 	}
 
-	err = h.service.Repository.Update(3, todoItem)
+	err = h.service.Repository.Update(id, todoItem)
 
 	if err != nil {
 		return response.CustomErrorBuilder(500, dto.ErrorNilObject{}, err.Error(), response.Constant.Error.InternalServerError.Error()).Send(c)
@@ -181,7 +181,7 @@ func (h *handler) Delete(c echo.Context) error {
 	err = h.service.Repository.FindById(id, &abstractions.GetByIdQueries{}, todoItem)
 
 	if err != nil {
-		return response.CustomErrorBuilder(404, &dto.ErrorNilObject{}, fmt.Sprintf("Activity with ID %v Not Found", id), "Not Found").Send(c)
+		return response.CustomErrorBuilder(404, &dto.ErrorNilObject{}, fmt.Sprintf("Todo with ID %v Not Found", id), "Not Found").Send(c)
 
 	}
 

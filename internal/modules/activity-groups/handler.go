@@ -105,7 +105,7 @@ func (h *handler) Store(c echo.Context) error {
 		return response.ErrorBuilder(response.Constant.Error.InternalServerError, err).Send(c)
 	}
 
-	return response.CustomSuccessBuilder(201, activityGroup, "Success", "success").Send(c)
+	return response.CustomSuccessBuilder(201, activityGroup, "Success", "Success").Send(c)
 
 }
 

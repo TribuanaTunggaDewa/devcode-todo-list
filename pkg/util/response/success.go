@@ -41,8 +41,8 @@ func CustomSuccessBuilder(code int, data any, message string, status string) *Su
 	return &Success{
 		Response: successResponse{
 			Meta: Meta{
-				Status:  "success",
-				Message: "success",
+				Status:  "Success",
+				Message: "Success",
 				Data:    data,
 			},
 		},
