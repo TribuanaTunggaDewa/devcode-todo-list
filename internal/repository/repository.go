@@ -8,85 +8,85 @@ import (
 	"gorm.io/gorm"
 )
 
-type Repository struct {
+type repository struct {
 	DBConnection *gorm.DB
 	Model        any
 }
 
-func NewRepository(DBConnection *gorm.DB, Model any) *Repository {
-	return &Repository{
+func NewRepository(DBConnection *gorm.DB, Model any) *repository {
+	return &repository{
 		DBConnection,
 		Model,
 	}
 }
 
-func (r *Repository) Find(payload *abstractions.GetQueries, out any, param string) error {
+func (r *repository) Find(payload *abstractions.GetQueries, out any, param string) (any, error) {
 	t := reflect.TypeOf(out)
 	if t.Kind() != reflect.Ptr {
-		return errors.New("out must be a pointer")
+		return nil, errors.New("out must be a pointer")
 	}
 
 	query := r.DBConnection.Model(r.Model)
 
 	err := query.Find(out).Error
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return out, nil
 }
 
-func (r *Repository) FindById(id int, payload *abstractions.GetByIdQueries, out any) error {
+func (r *repository) FindById(id int, payload *abstractions.GetByIdQueries, out any) (any, error) {
 	t := reflect.TypeOf(out)
 	if t.Kind() != reflect.Ptr {
-		return errors.New("out must be a pointer")
+		return nil, errors.New("out must be a pointer")
 	}
 
 	query := r.DBConnection.Model(r.Model)
 
 	err := query.Where("id = ?", id).First(out).Error
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return out, nil
 }
 
-func (r *Repository) Create(input any) error {
+func (r *repository) Create(input any) (any, error) {
 	t := reflect.TypeOf(input)
 	if t.Kind() != reflect.Ptr {
-		return errors.New("out must be a pointer")
+		return nil, errors.New("out must be a pointer")
 	}
 
 	query := r.DBConnection.Model(r.Model).Create(input)
 	err := query.Error
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return input, nil
 }
 
-func (r *Repository) Update(id int, payload any) error {
+func (r *repository) Update(id int, payload any) (any, error) {
 	t := reflect.TypeOf(payload)
 	if t.Kind() != reflect.Ptr {
-		return errors.New("out must be a pointer")
+		return nil, errors.New("out must be a pointer")
 	}
 
 	query := r.DBConnection.Model(r.Model)
 	err := query.Where("id = ?", id).Updates(payload).Error
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return payload, nil
 }
 
-func (r *Repository) Delete(data any) error {
+func (r *repository) Delete(data any) (any, error) {
 	query := r.DBConnection.Model(data)
 
 	err := query.Delete(data).Error
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &data, nil
 }

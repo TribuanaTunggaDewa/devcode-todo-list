@@ -17,7 +17,7 @@ import (
 )
 
 type handler struct {
-	service *service.Service
+	service service.ServiceInteface
 }
 
 func NewHandler() *handler {
@@ -36,7 +36,7 @@ func (h *handler) Get(c echo.Context) error {
 	repository := repository.NewTodoItem(dbconnection, data)
 	h.service = service.NewService(repository)
 
-	err = h.service.Repository.Find(&abstractions.GetQueries{}, data, param)
+	_, err = h.service.Find(&abstractions.GetQueries{}, data, param)
 
 	if err != nil {
 		return response.ErrorBuilder(response.Constant.Error.NotFound, errors.New("activity-group not found")).Send(c)
@@ -61,7 +61,7 @@ func (h *handler) GetById(c echo.Context) error {
 	repository := repository.NewTodoItem(dbconnection, data)
 	h.service = service.NewService(repository)
 
-	err = h.service.Repository.FindById(id, &abstractions.GetByIdQueries{}, data)
+	_, err = h.service.FindById(id, &abstractions.GetByIdQueries{}, data)
 
 	if err != nil {
 		return response.CustomErrorBuilder(404, &dto.ErrorNilObject{}, fmt.Sprintf("Todo with ID %v Not Found", id), "Not Found").Send(c)
@@ -103,7 +103,7 @@ func (h *handler) Store(c echo.Context) error {
 	todoItem.IsActive = "1"
 	todoItem.Priority = "very-high"
 
-	err = h.service.Repository.Create(todoItem)
+	_, err = h.service.Create(todoItem)
 
 	if err != nil {
 		return response.ErrorBuilder(response.Constant.Error.InternalServerError, err).Send(c)
@@ -136,7 +136,7 @@ func (h *handler) Update(c echo.Context) error {
 		return response.ErrorBuilder(response.Constant.Error.BadRequest, err).Send(c)
 	}
 
-	err = h.service.Repository.FindById(id, &abstractions.GetByIdQueries{}, todoItem)
+	_, err = h.service.FindById(id, &abstractions.GetByIdQueries{}, todoItem)
 
 	if err != nil {
 		return response.CustomErrorBuilder(404, &dto.ErrorNilObject{}, fmt.Sprintf("Todo with ID %v Not Found", id), "Not Found").Send(c)
@@ -151,7 +151,7 @@ func (h *handler) Update(c echo.Context) error {
 		todoItem.Title = payload.Title
 	}
 
-	err = h.service.Repository.Update(id, todoItem)
+	_, err = h.service.Update(id, todoItem)
 
 	if err != nil {
 		return response.CustomErrorBuilder(500, dto.ErrorNilObject{}, err.Error(), response.Constant.Error.InternalServerError.Error()).Send(c)
@@ -178,14 +178,14 @@ func (h *handler) Delete(c echo.Context) error {
 		return response.ErrorBuilder(response.Constant.Error.BadRequest, err).Send(c)
 	}
 
-	err = h.service.Repository.FindById(id, &abstractions.GetByIdQueries{}, todoItem)
+	_, err = h.service.FindById(id, &abstractions.GetByIdQueries{}, todoItem)
 
 	if err != nil {
 		return response.CustomErrorBuilder(404, &dto.ErrorNilObject{}, fmt.Sprintf("Todo with ID %v Not Found", id), "Not Found").Send(c)
 
 	}
 
-	err = h.service.Repository.Delete(todoItem)
+	_, err = h.service.Delete(todoItem)
 	if err != nil {
 		return err
 	}

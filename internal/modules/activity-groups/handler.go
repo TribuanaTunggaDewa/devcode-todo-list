@@ -17,7 +17,7 @@ import (
 )
 
 type handler struct {
-	service *service.Service
+	service service.ServiceInteface
 }
 
 func NewHandler() *handler {
@@ -35,7 +35,7 @@ func (h *handler) Get(c echo.Context) error {
 	repository := repository.NewRepository(dbconnection, data)
 	h.service = service.NewService(repository)
 
-	err = h.service.Repository.Find(&abstractions.GetQueries{}, data, "")
+	_, err = h.service.Find(&abstractions.GetQueries{}, data, "")
 
 	if err != nil {
 		return response.ErrorBuilder(response.Constant.Error.NotFound, errors.New("activity-group not found")).Send(c)
@@ -60,7 +60,7 @@ func (h *handler) GetById(c echo.Context) error {
 	repository := repository.NewRepository(dbconnection, data)
 	h.service = service.NewService(repository)
 
-	err = h.service.Repository.FindById(id, &abstractions.GetByIdQueries{}, data)
+	_, err = h.service.FindById(id, &abstractions.GetByIdQueries{}, data)
 
 	if err != nil {
 		return response.CustomErrorBuilder(404, &dto.ErrorNilObject{}, fmt.Sprintf("Activity with ID %v Not Found", id), "Not Found").Send(c)
@@ -99,7 +99,7 @@ func (h *handler) Store(c echo.Context) error {
 		return response.ErrorBuilder(response.Constant.Error.InternalServerError, err).Send(c)
 	}
 
-	err = h.service.Repository.Create(activityGroup)
+	_, err = h.service.Create(activityGroup)
 
 	if err != nil {
 		return response.ErrorBuilder(response.Constant.Error.InternalServerError, err).Send(c)
@@ -135,7 +135,7 @@ func (h *handler) Update(c echo.Context) error {
 		return response.CustomErrorBuilder(400, dto.ErrorNilObject{}, "title cannot be null", "Bad Request").Send(c)
 	}
 
-	err = h.service.Repository.FindById(id, &abstractions.GetByIdQueries{}, activityGroup)
+	_, err = h.service.FindById(id, &abstractions.GetByIdQueries{}, activityGroup)
 
 	if err != nil {
 		return response.CustomErrorBuilder(404, &dto.ErrorNilObject{}, fmt.Sprintf("Activity with ID %v Not Found", id), "Not Found").Send(c)
@@ -150,7 +150,7 @@ func (h *handler) Update(c echo.Context) error {
 		activityGroup.Title = payload.Title
 	}
 
-	err = h.service.Repository.Update(id, activityGroup)
+	_, err = h.service.Update(id, activityGroup)
 
 	if err != nil {
 		return response.CustomErrorBuilder(500, dto.ErrorNilObject{}, err.Error(), response.Constant.Error.InternalServerError.Error()).Send(c)
@@ -176,14 +176,14 @@ func (h *handler) Delete(c echo.Context) error {
 		return response.ErrorBuilder(response.Constant.Error.BadRequest, err).Send(c)
 	}
 
-	err = h.service.Repository.FindById(id, &abstractions.GetByIdQueries{}, activityGroup)
+	_, err = h.service.FindById(id, &abstractions.GetByIdQueries{}, activityGroup)
 
 	if err != nil {
 		return response.CustomErrorBuilder(404, &dto.ErrorNilObject{}, fmt.Sprintf("Activity with ID %v Not Found", id), "Not Found").Send(c)
 
 	}
 
-	err = h.service.Repository.Delete(activityGroup)
+	_, err = h.service.Delete(activityGroup)
 	if err != nil {
 		return err
 	}

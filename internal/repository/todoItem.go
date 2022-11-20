@@ -9,24 +9,23 @@ import (
 )
 
 type TodoItemRepository struct {
-	DBConnection *gorm.DB
-	Model        any
+	*repository
 }
 
 func NewTodoItem(DBConnection *gorm.DB, Model any) *TodoItemRepository {
+	repo := NewRepository(DBConnection, Model)
 	return &TodoItemRepository{
-		DBConnection,
-		Model,
+		repository: repo,
 	}
 }
 
-func (r *TodoItemRepository) Find(payload *abstractions.GetQueries, out any, param string) error {
+func (r *TodoItemRepository) Find(payload *abstractions.GetQueries, out any, param string) (any, error) {
 	t := reflect.TypeOf(out)
 	if t.Kind() != reflect.Ptr {
-		return errors.New("out must be a pointer")
+		return nil, errors.New("out must be a pointer")
 	}
 
-	query := r.DBConnection.Model(r.Model)
+	query := r.repository.DBConnection.Model(r.repository.Model)
 
 	if param != "" {
 		query = query.Where("activity_group_id = ?", param)
@@ -34,63 +33,8 @@ func (r *TodoItemRepository) Find(payload *abstractions.GetQueries, out any, par
 
 	err := query.Find(out).Error
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
-}
-
-func (r *TodoItemRepository) FindById(id int, payload *abstractions.GetByIdQueries, out any) error {
-	t := reflect.TypeOf(out)
-	if t.Kind() != reflect.Ptr {
-		return errors.New("out must be a pointer")
-	}
-
-	query := r.DBConnection.Model(r.Model)
-
-	err := query.Where("id = ?", id).First(out).Error
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (r *TodoItemRepository) Create(input any) error {
-	t := reflect.TypeOf(input)
-	if t.Kind() != reflect.Ptr {
-		return errors.New("out must be a pointer")
-	}
-
-	query := r.DBConnection.Model(r.Model).Create(input)
-	err := query.Error
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (r *TodoItemRepository) Update(id int, payload any) error {
-	t := reflect.TypeOf(payload)
-	if t.Kind() != reflect.Ptr {
-		return errors.New("out must be a pointer")
-	}
-
-	query := r.DBConnection.Model(r.Model)
-	err := query.Where("id = ?", id).Updates(payload).Error
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (r *TodoItemRepository) Delete(data any) error {
-	query := r.DBConnection.Model(data)
-
-	err := query.Delete(data).Error
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return &out, nil
 }
